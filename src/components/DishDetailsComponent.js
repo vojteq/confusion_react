@@ -75,7 +75,7 @@ class DishDetails extends Component {
         const dish = this.props.dish;
         if (dish != null) {
             return (
-                <div className="row">
+                <div>
                     <div className="col-12 col-md-5 m-1">
                         {this.renderDish(dish)}
                     </div>
