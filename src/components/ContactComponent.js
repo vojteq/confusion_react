@@ -6,6 +6,7 @@ import { Control, LocalForm, Errors } from 'react-redux-form';
 class Contact extends Component {
 
     constructor(props) {
+        super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
