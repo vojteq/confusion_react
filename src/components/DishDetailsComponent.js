@@ -26,9 +26,8 @@ class CommentForm extends Component {
     }
 
     handleSubmit(values) {
-        console.log("state: " + JSON.stringify(values));
-        alert("state: " + JSON.stringify(values));
         this.toggleCommentFormModal();
+        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
     }
 
     render() {
@@ -66,14 +65,14 @@ class CommentForm extends Component {
                                         }}
                                     />
                                     <Errors
-                                    className="text-danger"
-                                    model=".name"
-                                    show="touched"
-                                    messages={{
-                                        required: "Required ",
-                                        minLength: "Must be at least 3 characters long",
-                                        maxLength: "Must be 15 characters or less"
-                                    }} />
+                                        className="text-danger"
+                                        model=".name"
+                                        show="touched"
+                                        messages={{
+                                            required: "Required ",
+                                            minLength: "Must be at least 3 characters long",
+                                            maxLength: "Must be 15 characters or less"
+                                        }} />
                                 </Col>
                             </Row>
                             <Row className="form-group" row>
@@ -114,7 +113,7 @@ function RenderDish({ dish }) {
 
 }
 
-function RenderComments({ commentsArray }) {
+function RenderComments({ commentsArray, addComment, dishId }) {
     if (commentsArray != null && commentsArray.length !== 0) {
 
         const comments = commentsArray.map((comment) => {
@@ -133,7 +132,7 @@ function RenderComments({ commentsArray }) {
                 <div className="list-unstyled">
                     {comments}
                 </div>
-                <CommentForm />
+                <CommentForm dishId={dishId} addComment={addComment} />
             </div>
         );
     }
@@ -170,7 +169,12 @@ const DishDetails = (props) => {
                         <RenderDish dish={props.dish} />
                     </div>
                     <div className="col-12 col-md-5 m-1">
-                        {props.comments ? <RenderComments commentsArray={props.comments} /> : null}
+                        {!props.comments ?
+                            null : <RenderComments
+                                commentsArray={props.comments}
+                                addComment={props.addComment}
+                                dishId={props.dish.id} />
+                        }
                     </div>
                 </div>
             </div>
