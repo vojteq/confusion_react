@@ -37,7 +37,8 @@ export const postComment = (dishId, rating, author, comment) => (dispatch) => {
             error => {
                 var errMess = new Error(error.message);
                 throw errMess;
-            })
+            }
+        )
         .then(response => response.json())
         .then(response => dispatch(addComment(response)))
         .catch(error => {
@@ -136,7 +137,8 @@ export const fetchPromos = () => (dispatch) => {
             error => {
                 var errMess = new Error(error.message);
                 throw errMess;
-            })
+            }
+        )
         .then(response => response.json())
         .then(promos => dispatch(addPromos(promos)))
         .catch(error => dispatch(promosFailed(error.message)));
@@ -155,3 +157,75 @@ export const addPromos = (promos) => ({
     type: ActionTypes.ADD_PROMOS,
     paylode: promos
 });
+
+// assignment 4
+export const fetchLeaders = () => (dispatch) => {
+    dispatch(leadersLoading(true));
+
+    return fetch(baseUrl + 'leaders')
+        .then(
+            response => {
+                if (response.ok) {
+                    return response;
+                }
+                else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                var errMess = new Error(error.message);
+                throw errMess;
+            }
+        )
+        .then(response => response.json())
+        .then(leaders => dispatch(addLeaders(leaders)))
+        .catch(error => dispatch(leadersFailed(error.message)));
+};
+
+export const leadersLoading = () => ({
+    type: ActionTypes.LEADERS_LOADING
+});
+
+export const leadersFailed = (errMess) => ({
+    type: ActionTypes.LEADERS_FAILED,
+    paylode: errMess
+});
+
+export const addLeaders = (leaders) => ({
+    type: ActionTypes.ADD_LEADERS,
+    paylode: leaders
+});
+
+export const postFeedback = (feedback) => (dispatch) => {
+    return fetch(baseUrl + 'feedback', {
+        method: 'Post',
+        body: JSON.stringify(feedback),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+        .then(
+            response => {
+                if (response.ok) {
+                    return response;
+                }
+                else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                var errMess = new Error(error.message);
+                throw errMess;
+            }
+        )
+        .then(response => response.json())
+        .catch(error => {
+            console.log('Post feedback', error.message);
+            alert('Your feedback could not be posted\nError: ' + error.message);
+        })
+}

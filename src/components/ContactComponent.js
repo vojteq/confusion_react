@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Breadcrumb, BreadcrumbItem, Button, Label, Col, Row, } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Control, Form, Errors, actions } from 'react-redux-form';
+import { Control, Form, Errors } from 'react-redux-form';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -17,8 +17,28 @@ class Contact extends Component {
     }
 
     handleSubmit(values) {
-        console.log("current state is: " + JSON.stringify(values));
-        alert("current state is: " + JSON.stringify(values));
+        // console.log("current state is: " + JSON.stringify(values));
+        // alert("current state is: " + JSON.stringify(values));
+        const feedback = {
+            firstName: values.firstName,
+            lastName: values.lastName,
+            telNum: values.telNum,
+            email: values.email,
+            agree: values.agree,
+            contactType: values.contactType,
+            message: values.message
+        };
+        this.props.postFeedback(feedback).then(response => {
+            alert(
+                'firstName: ' + response.firstName + ', ' + 
+                'lastName: ' + response.lastName + ', ' + 
+                'telNum: ' + response.telNum + ', ' + 
+                'email: ' + response.email + ', ' + 
+                'agree: ' + response.agree + ', ' + 
+                'contactType: ' + response.contactType + ', ' +
+                'message: ' + response.message + ', '
+            )
+        });
         this.props.resetFeedbackForm();
     }
 
